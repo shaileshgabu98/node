@@ -1,0 +1,25 @@
+#body{
+    background-color: rgba(238, 238, 238, 0.68);
+}
+#login-form{
+    /* background-color: rgba(227, 227, 227, 0.578); */
+    /* box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px; */
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+/* .signUp-btn, .login-btn{
+    width: 48%;
+} */
+.nav-tabs .nav-item .nav-link.active {
+    color: #ffffff;
+    background-color: #0080FF;
+    transition: ease 0.5s;
+  }
+.nav-tabs .nav-item .nav-link.active:hover {
+    color: #ffffff;
+    background-color: #006fdd;
+  }
+.nav-tabs .nav-item .nav-link:hover{
+    border: 1px solid #0080FF;
+    transition: all 0.5s;
+
+  }
