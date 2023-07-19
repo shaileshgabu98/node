@@ -6,7 +6,7 @@
     <title>Document</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
-    <!-- <style>
+    <style>
       #img-preview {
         width: 100px;
         height: 100px;
@@ -37,48 +37,35 @@
         background-color: #fff;
         color: #f44336;
       }
-    </style> -->
+    </style>
   </head>
   <body>
-    <!-- <form action="http://localhost:3200/upload" method="POST" enctype="multipart/form-data">
-    <input type="file" name="profileImage" />
-    <button type="submit">Upload</button> -->
-</form>
-    <!-- <form action="/upload" method="POST" enctype="multipart/form-data">
+    <!-- <form
+      action="http://localhost:3200/upload"
+      method="POST"
+      enctype="multipart/form-data">
+      <input type="file" name="profileImage" />
+      <button type="submit">Upload</button>
+    </form> -->
+    <form
+      onsubmit="getFormData(event)"
+      method="POST"
+      enctype="multipart/form-data">
       <div>
         <div id="img-preview"></div>
         <input
           type="file"
           id="choose-file"
-          name="choose-file"
+          name="profileImage"
           accept="image/*" />
         <label for="choose-file">Choose File</label>
-        <input type="submit" value="submit">
+        <input type="submit" value="submit" />
       </div>
-    </form> -->
-
+    </form>
 
     <script>
-      //   const chooseFile = document.getElementById('choose-file');
-      //   const imgPreview = document.getElementById('img-preview');
-
-      //   chooseFile.addEventListener('change', function () {
-      //     getImgData();
-      //   });
-
-      //   function getImgData() {
-      //     const files = chooseFile.files[0];
-      //     if (files) {
-      //       const fileReader = new FileReader();
-      //       fileReader.readAsDataURL(files);
-      //       fileReader.addEventListener('load', function () {
-      //         imgPreview.style.display = 'block';
-      //         imgPreview.innerHTML = '<img src="' + this.result + '" />';
-      //       });
-      //     }
-      //   }
-        $('#choose-file').change(function () {
-          getImgData();
+      $('#choose-file').change(function () {
+        getImgData();
         function getImgData() {
           var files = $('#choose-file')[0].files[0];
           if (files) {
@@ -91,6 +78,26 @@
           }
         }
       });
+      const getFormData = (event) => {
+        event.preventDefault();
+        const formData = new FormData();
+        files = $('#choose-file')[0].files[0];
+        formData.append('profileImage', files);
+        console.log('formData', formData);
+        $.ajax({
+            type: "POST",
+            enctype: 'multipart/form-data',
+            url: 'http://localhost:3200/customer/adding',
+            data: formData,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (data) {
+                console.log(data);
+            },
+        });
+      };
     </script>
   </body>
 </html>

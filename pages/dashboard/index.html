@@ -70,7 +70,7 @@
               <form >
                 
               </form>
-              <form id="uploadImage" method="POST" enctype="multipart/form-data">
+              <form onsubmit="handleSubmit()" id="dataForm">
                 <div class="user-profile-pic">
                   <div id="img-preview"></div>
                   <input
@@ -79,6 +79,7 @@
                   name="profileImage"/>
                   <label for="choose-file">Choose File</label>
                 </div>
+                <input type="hidden" id="customerPhoto">
                 <input type="hidden" id="customerId" >
                 <div class="mb-3">
                   <label for="customerName" class="form-label">Full Name</label>
@@ -89,6 +90,7 @@
                     type="text"
                     class="form-control"
                     id="customerName"
+                    name="customerName"
                     placeholder="Enter FullName" />
                 </div>
                 <div class="mb-3">
@@ -125,7 +127,7 @@
                   <button
                     type="submit"
                     id="submitBtn"
-                    onclick="handleSubmit(event)"
+                    
                     class="submitBtn btn btn-primary">
                     Submit
                   </button>

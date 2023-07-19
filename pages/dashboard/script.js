@@ -9,7 +9,7 @@ const addCustomerBtn = () => {
   $('#customerName').val('');
   $('#customerNumber').val('');
   $('#customerEmail').val('');
-  $("#uploadImage").attr("action", "http://localhost:3200/upload/photo");
+  $('#img-preview').html('');
   showSubmit();
   hideLoaderBtn();
 };
@@ -18,21 +18,11 @@ const editCustomerBtn = (row) => {
   $('#customerNumber').val(row.mobile);
   $('#customerEmail').val(row.email);
   $('#customerId').val(row.id);
+  $('#customerPhoto').val(row.photo);
   $('#img-preview').html(`<img src="../../upload/${row.photo}" />`);
-  console.log("::::row.photo",row.photo);
-  $("#uploadImage").attr("action", "http://localhost:3200/update/photo");
   showSubmit();
   hideLoaderBtn();
-  CustomerPhoto(row.photo)
-  return row.photo
 };
-let customerPhotos = '';
-const CustomerPhoto=(Photo)=>{
-  customerPhotos = Photo
-}
-
-
-
 var modelType = '';
 const openModel = (modal, row) => {
   if ('updateModal' == modal) {
@@ -46,13 +36,12 @@ const openModel = (modal, row) => {
   }
 };
 
-const handleSubmit = (event) => {
+const handleSubmit = () => {
   if (modelType == 'update') {
       updateCustomer(event);
-      // event.preventDefault();
-    console.log('data submitted');
   } else {
     addCustomer(event);
+
   }
 };
 
@@ -71,28 +60,38 @@ $('#choose-file').change(function () {
   }
 });
 
-const addCustomer = () => {
+const addCustomer = (event) => {
+  event.preventDefault();
+  const formData = new FormData();
+  let files = $('#choose-file')[0].files[0];
   let id = Math.random();
   let name = $('#customerName').val();
   let mobile = $('#customerNumber').val();
   let email = $('#customerEmail').val();
-  customerData = { id: id, name: name, mobile: mobile, email: email };
-  console.log(customerData);
+  formData.append('profileImage', files);
+  formData.append('id', id)
+  formData.append('name', name)
+  formData.append('mobile', mobile)
+  formData.append('email', email)
   if (name != '' && mobile != '' && email != '') {
     showLoaderBtn();
     hideSubmit();
     $.ajax({
       type: 'POST',
+      enctype: 'multipart/form-data',
       url: 'http://localhost:3200/customer/add',
-      dataType: 'json',
-      contentType: 'application/json',
-      data: JSON.stringify(customerData),
+      data: formData,
+      processData: false,
+      contentType: false,
+      cache: false,
       success: function (response) {
+        console.log("response",response)
         if (response.status == true) {
           $('#customerName').val('');
           $('#customerNumber').val('');
           $('#customerEmail').val('');
           $('#img-preview').html('');
+          $('#customerPhoto').val('');
           $('#CustomerModel').modal('hide');
           hideLoaderBtn();
           showSubmit();
@@ -108,55 +107,43 @@ const addCustomer = () => {
 };
 
 const updateCustomer = (event) => {
-  // let photoUpdate =  $('#choose-file').val();
+  event.preventDefault();
+  const formData = new FormData();
+  let files = $('#choose-file')[0].files[0];
   let nameUpdate = $('#customerName').val();
   let mobileUpdate = $('#customerNumber').val();
   let emailUpdate = $('#customerEmail').val();
+  let customerPhoto = $('#customerPhoto').val();
   let id = parseFloat($('#customerId').val());
-  let customerOldPhoto = customerPhotos
-  console.log("customerPhotos::::::",customerOldPhoto);
-  let UpdatedCustomer = {
-    id: id,
-    name: nameUpdate,
-    mobile: mobileUpdate,
-    email: emailUpdate,
-  };
-  let customerPhotoData = {
-    id: id,
-    name: nameUpdate,
-    mobile: mobileUpdate,
-    email: emailUpdate,
-    photo:customerOldPhoto
-  }
+  formData.append('id', id);
+  formData.append('name', nameUpdate);
+  formData.append('email', emailUpdate);
+  formData.append('mobile', mobileUpdate);
+  formData.append('profileImage', files);
+  formData.append('oldCustomerPhoto', customerPhoto);
   if (nameUpdate != '' && mobileUpdate != '' && emailUpdate != '') {
     showLoaderBtn();
     hideSubmit(); 
     $.ajax({
       type: 'PUT',
+      enctype: 'multipart/form-data',
       url: 'http://localhost:3200/customer/update',
-      dataType: 'json',
-      contentType: 'application/json',
-      data: JSON.stringify(UpdatedCustomer),
+      data: formData,
+      processData: false,
+      contentType: false,
+      cache: false,
       success: function (response) {
-        $.ajax({
-          type:'PUT',
-          url:'http://localhost:3200/update/photo',
-          dataType: 'json',
-          contentType: 'application/json',
-          data: JSON.stringify(customerPhotoData),
-          success:function(response){
-            console.log(response)
-          }
-        })
         if (response.status == true) {
           $('#customerName').val('');
           $('#customerNumber').val('');
           $('#customerEmail').val('');
+          $('#customerPhoto').val('');
+          $('#img-preview').html('');
+          $('#choose-file').val('')
           $('#CustomerModel').modal('hide');
           hideLoaderBtn();
           showSubmit();
           getCustomer();
-          event.preventDefault();
         }
       }
     });
