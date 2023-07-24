@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>email</title>
+    <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script defer src="./script.js"></script>
+    <style>
+        #mail-body{
+            background-color: rgb(29, 36, 36);
+            color: aliceblue;
+            padding: 15px;
+        }
+        
+        h4 , h3{
+            margin: 0%;
+        }
+        p{
+            margin: 0%;
+        }
+        .welcom-gif{
+            width: 100%;
+            height: 200px;
+            /* margin: 0 auto; */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* background-color: aqua; */
+            margin-bottom: 20px;
+        }
+        .welcom-gif img{
+            width: 60%;
+            height: 100%;
+        }
+        .dev-details{
+            width: 100%;
+            margin: 10px 0px;
+            color:aliceblue
+        }
+        .sender{
+            width: 100%;
+            height:150px;
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+            border: 1px solid grey;
+            border-radius: 5px;
+            color: rgb(255, 255, 255);
+            background-color: rgba(58, 58, 58, 0.553);
+        }
+        .sender-img{
+            width: 200px;
+            height: 90%;
+            border: 1px solid gray;
+            border-radius: 5px;
+            display: flex;
+            margin: 10px;;
+            align-items: center;
+            /* background-color: rgba(109, 109, 109, 0.553); */
+        }
+        .sender-img img{
+            padding: 5px;
+            width: 100%;
+            height: 50%;
+            box-sizing: border-box;
+        }
+        .sender-info{
+            padding: 5px;
+            box-sizing: border-box;
+            width: 90%;
+            height: 90%;
+            border: 1px solid gray;
+            border-radius: 5px;
+            margin: 10px;
+            color: aliceblue;
+            /* background-color: rgba(61, 61, 61, 0.553); */
+        }
+        .sender-info p{
+            margin: 5px;
+            color: aliceblue;
+        }
+        .sender-info span{
+            margin: 20px 5px;
+        }
+        .sender-info i{
+            margin-right: 10px;
+            color: aliceblue;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body id="mail-body">
+    <div class="container">
+        <br>
+        <h3>Dear, ##recipient's-name##</h3>
+        <br>
+        <div class="welcom-gif">
+            <img src="https://res.cloudinary.com/dkpuzrsfv/image/upload/v1689939293/lh8lshjnkqrwbjtiwpvf.gif">
+        </div>
+        <p>Welcome to <span>##company-name##</span>, We are thrilled to have you on board and want to extend our warmest greetings.
+            Thank you for registering with us.
+            Here are a few important details about your account:</p>
+            <div class="dev-details">
+                <h4>Username: <span>##user-name##</span></h4>
+                <h4>Email Address:<span> ##user-email-address##</span></h4>
+            </div>
+        <p>If you ever need any assistance or have questions, please don't hesitate to contact our support team at
+        <span> ##company-support-mail##</span>. We're here to help you with anything you might need.
+            Stay updated with the latest news, offers, and updates by following us on<span> ##company-info-mail##</span>.
+            Once again, welcome to our community! We look forward to serving you and providing you with an excellent
+            experience.</p>
+        <h4>Thank You</h4>
+        <div class="sender">
+            <div class="sender-img">
+                <img src="https://res.cloudinary.com/dkpuzrsfv/image/upload/v1689939680/hrui7nyawolssbt89d8a.png">
+            </div>
+            <div class="sender-info">
+                <h3>##sender-name##</h3>
+                <p>Mobile : ##sender-mobile##</p>
+                <!-- <p>##sender-designation##</p> -->
+                <p>Email : ##sender-email##</p>
+                <p>Website : <a href="##sender-website##">creditt.in</a></p>
+                <span><a href="https://www.twitter.com/CredittApp"><i class="bi bi-facebook"></i></a><a href="https://www.twitter.com/CredittApp"><i class="bi bi-twitter"></i></a><a href="https://www.instagram.com/credittplus/"><i class="bi bi-instagram"></i></a><a href="https://www.linkedin.com/company/credittapp/"><i class="bi bi-linkedin"></i></a></span>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

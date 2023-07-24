@@ -1,6 +1,7 @@
 const fs = require('fs');
 const cors = require('cors');
 const express = require('express');
+var nodemailer = require('nodemailer');
 const app = express();
 const path = require('path');
 const multer = require('multer');
@@ -9,6 +10,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname + '/upload')));
+const { mailer } = require('./services/nodemailer/mailer')
 
 // read file functionality
 async function readFile() {
@@ -80,8 +82,8 @@ const upload = multer({
 // add customer functionality
 app.post('/customer/add', upload.single('profileImage'), async (req, res) => {
   let customerPhoto = req.file.filename;
-
   params = req.body;
+  console.log("======email", params.email)
   params.photo = customerPhoto;
   let getCustomerData = await readFile();
   getCustomerData.push(params);
@@ -100,6 +102,29 @@ app.post('/customer/add', upload.single('profileImage'), async (req, res) => {
       });
     }
   });
+  //nodemailer functionality
+  // let transporter = nodemailer.createTransport({
+  //   host: 'smtp.gmail.com',
+  //   port: 465,
+  //   secure:true,
+  //   auth: {
+  //       user: 'shailesh.gabu@creditt.in',
+  //       pass: 'hegaixrozpzbcjpf'
+  //   }
+  // });
+  // var mailOptions = {
+  //   from: 'shailesh.gabu@creditt.in',
+  //   to: params.email,
+  //   subject: 'Sending Email using Node.js',
+  //   text: 'welcome to creditt'
+  // };
+  // transporter.sendMail(mailOptions, function(error, info){
+  //   if (error) {
+  //     console.log(error);
+  //   } else {
+  //     console.log('Email sent: ' + info.response);
+  //   }
+  // });
 });
 
 // get customer functionality
@@ -158,7 +183,7 @@ app.put('/customer/update', upload.single('profileImage'), async (req, res) => {
         if (err) {
           console.log(err);
         }
-        console.log('deletedasa');
+        console.log('deleted');
       });
     }
   }
@@ -195,6 +220,44 @@ app.delete('/customer/delete', async (req, res) => {
     });
   }
 });
+// const readMailhtml = () => {
+
+//   fs.readFile(
+//     path.join(__dirname, '/pages/dashboard/mail.html'),
+//     'utf-8',
+//     (error, html) => {
+//       if (error) {
+//         resolve(false);
+//         console.log(error);
+//         return;
+//       }
+//       html.replace('##name', 'gabu shailesh');
+//       console.log(html)
+//     }
+//   );
+
+
+// };
+//send mail functionality
+app.post("/customer/sendmail", async (req, res) => {
+  params = req.body;
+  console.log(params);
+  fs.readFile(path.join(__dirname, '/pages/mail/mail.html'), 'utf-8', (error, htmlContent) => {
+    if (error) {
+      console.log(error)
+    }
+    const html = htmlContent.replace(/##recipient's-name##/g,'kartavya Solanki').replace(/##sender-name##/g, 'Credify Technologies Pvt Ltd.').replace(/##sender-designation##/g, 'Node developer').replace(/##sender-mobile##/g, '+91 2245811515').replace(/##sender-email##/g, 'info@creditt.in').replace(/##sender-website##/g, 'https://creditt.in/').replace(/##user-name##/g, 'kartavya123').replace(/##user-email-address##/g, 'kartavya.solanki@creditt.in').replace(/##company-name##/g,'Credify Technologies').replace(/ ##company-support-mail##/g,'customer.support@gmail.com').replace(/##company-info-mail##/g,'info@creditt.in');
+    console.log(html) 
+
+    let mailOptions = {
+      from: 'shailesh.gabu@creditt.in',
+      to: params.mailAddress,
+      subject: params.mailSubject,
+      html: html
+    };
+    mailer(mailOptions)
+  })
+})
 
 // user login and signup ---------------------------------------
 
@@ -286,6 +349,30 @@ app.post('/user/login', async (req, res) => {
     }
   }
 });
+
+//node mailer
+// let transporter = nodemailer.createTransport({
+//   host: 'smtp.gmail.com',
+//   port: 465,
+//   secure:true,
+//   auth: {
+//       user: 'shailesh.gabu@creditt.in',
+//       pass: 'hegaixrozpzbcjpf'
+//   }
+// });
+// var mailOptions = {
+//   from: 'shailesh.gabu@creditt.in',
+//   to: 'shaileshgabu1431@gmail.com',
+//   subject: 'Sending Email using Node.js',
+//   text: 'That was easy!'
+// };
+// transporter.sendMail(mailOptions, function(error, info){
+//   if (error) {
+//     console.log(error);
+//   } else {
+//     console.log('Email sent: ' + info.response);
+//   }
+// });
 
 //server
 app.listen(3200, (error) => {

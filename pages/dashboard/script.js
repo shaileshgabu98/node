@@ -1,7 +1,6 @@
 $(document).ready(function () {
   getCustomer();
 });
-
 const addCustomerBtn = () => {
   $('#nameError').addClass('d-none');
   $('#mobileError').addClass('d-none');
@@ -23,6 +22,27 @@ const editCustomerBtn = (row) => {
   showSubmit();
   hideLoaderBtn();
 };
+const sendMailBtn = (row) => {
+  $('#recipient-name').val(row.email);
+
+}
+const mailHandler = () => {
+  let mailAddress = $('#recipient-name').val();
+  let mailSubject = $('#mail-subject').val();
+  let mailMessage = $('#message-text').val();
+  let mailDetails = { mailAddress: mailAddress, mailSubject: mailSubject, mailMessage: mailMessage }
+  console.log(mailDetails);
+  $.ajax({
+    type: "POST",
+    url: 'http://localhost:3200/customer/sendmail',
+    dataType: 'json',
+    contentType: 'application/json',
+    data: JSON.stringify(mailDetails),
+    success: function (response) {
+      console.log(response)
+    }
+  })
+}
 var modelType = '';
 const openModel = (modal, row) => {
   if ('updateModal' == modal) {
@@ -38,7 +58,7 @@ const openModel = (modal, row) => {
 
 const handleSubmit = () => {
   if (modelType == 'update') {
-      updateCustomer(event);
+    updateCustomer(event);
   } else {
     addCustomer(event);
 
@@ -85,7 +105,7 @@ const addCustomer = (event) => {
       contentType: false,
       cache: false,
       success: function (response) {
-        console.log("response",response)
+        console.log("response", response)
         if (response.status == true) {
           $('#customerName').val('');
           $('#customerNumber').val('');
@@ -123,7 +143,7 @@ const updateCustomer = (event) => {
   formData.append('oldCustomerPhoto', customerPhoto);
   if (nameUpdate != '' && mobileUpdate != '' && emailUpdate != '') {
     showLoaderBtn();
-    hideSubmit(); 
+    hideSubmit();
     $.ajax({
       type: 'PUT',
       enctype: 'multipart/form-data',
@@ -162,7 +182,7 @@ const getCustomer = () => {
     dataType: 'json',
     contentType: 'application/json',
     success: function (response) {
-      console.log("response :::::",response)
+      console.log("response :::::", response)
       closeLoader();
       if (response.status == true) {
         $('#customerTbody').empty();
@@ -170,17 +190,14 @@ const getCustomer = () => {
           for (let i = 0; i < response.data.length; i++) {
             let ele = response.data[i];
             ele.isUpdate = true;
-            let tbody = `<tr><th>${
-              i + 1
-            }</th><th><img style="width:40px; height:30px" src="../../upload/${
-              ele.photo
-            }"></th><th>${ele.name}</th><th>${ele.mobile}</th><th>${
-              ele.email
-            }</th><th><span onclick='openModel("updateModal",${JSON.stringify(
-              ele
-            )})' data-bs-toggle="modal" data-bs-target="#CustomerModel" ><i class="bi bi-pencil-square"></i></span><span class='px-2' onclick='deleteCustomer(${JSON.stringify(
-              ele
-            )})'><i class="bi bi-trash"></i></span></th></tr>`;
+            let tbody = `<tr><th>${i + 1
+              }</th><th><img style="width:40px; height:30px" src="../../upload/${ele.photo
+              }"></th><th>${ele.name}</th><th>${ele.mobile}</th><th>${ele.email
+              }</th><th><span onclick='openModel("updateModal",${JSON.stringify(
+                ele
+              )})' data-bs-toggle="modal" data-bs-target="#CustomerModel" ><i class="bi bi-pencil-square"></i></span><span class='px-2' onclick='deleteCustomer(${JSON.stringify(
+                ele
+              )})'><i class="bi bi-trash"></i></span><span class='px-2' onclick='sendMailBtn(${JSON.stringify(ele)})' data-bs-toggle="modal" data-bs-target="#mailModal"><i class="bi bi-envelope-at"></i></span></th></tr>`;
             $('#customerTbody').append(tbody);
           }
         }
