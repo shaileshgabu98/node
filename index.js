@@ -1,7 +1,6 @@
 const fs = require('fs');
 const cors = require('cors');
 const express = require('express');
-var nodemailer = require('nodemailer');
 const app = express();
 const path = require('path');
 const multer = require('multer');
@@ -11,6 +10,23 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname + '/upload')));
 const { mailer } = require('./services/nodemailer/mailer')
+const mysql = require('mysql');
+
+const connection = mysql.createConnection({
+  host:'localhost',
+  user:'root',
+  password:'',
+  database:'persons'
+})
+connection.query("select LastName from person",(err,result)=>{
+  if(err)
+  {
+    console.warn("some error");
+  }
+  else{
+    console.warn(result);
+  }
+})
 
 // read file functionality
 async function readFile() {
@@ -349,6 +365,9 @@ app.post('/user/login', async (req, res) => {
     }
   }
 });
+
+
+
 
 //node mailer
 // let transporter = nodemailer.createTransport({
