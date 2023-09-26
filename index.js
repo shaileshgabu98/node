@@ -11,6 +11,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname + '/upload')));
 const { mailer } = require('./services/nodemailer/mailer')
 const mysql = require('mysql');
+// const { error } = require('console');
+
 
 const connection = mysql.createConnection({
   host:'localhost',
